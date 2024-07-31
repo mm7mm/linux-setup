@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# Handle volume control based on argument
+arg=$1
+
+# Get the current volume and mute status
+vol_info=$(pactl get-sink-volume @DEFAULT_SINK@)
+mute_info=$(pactl get-sink-mute @DEFAULT_SINK@)
+
+# Check if the sink is muted
+if echo "$mute_info" | grep -q "yes"; then
+    echo "🔇"
+else
+    # Extract volume percentage from the output
+    vol=$(echo "$vol_info" | awk '/Volume:/ {print $5}' | sed 's/%//')
+
+case $vol in
+    [1-9][0-9][0-9]|1000) icon="🔊" ;;  # للمستويات فوق 100
+    [7-9][0-9]) icon="🔊" ;;             # للمستويات بين 70 و99
+    [3-6][0-9]) icon="🔉" ;;             # للمستويات بين 30 و69
+    [1-2][0-9]) icon="🔈" ;;             # للمستويات بين 10 و29
+    *) icon="🔇" ;;                      # أقل من 10
+esac
+
+    echo "$icon :$vol%"
+fi
+
+# Optional: Send signal to dwmblocks or slstatus to update the bar
+# pkill -RTMIN+30 dwmblocks
+
