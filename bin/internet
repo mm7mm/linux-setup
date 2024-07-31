@@ -1,39 +1,48 @@
 #!/bin/sh
 
-# Show wifi 📶 and percent strength or 📡 if none.
-# Show 🌐 if connected to ethernet or ❎ if none.
-# Show 🔒 if a vpn connection is active
+# Show only the status of the currently active network connection
 
 case $BLOCK_BUTTON in
-        1) "$TERMINAL" -e nmtui; pkill -RTMIN+4 dwmblocks ;;
-        3) notify-send "🌐 Internet module" "\- Click to connect
-❌: wifi disabled
-📡: no wifi connection
-📶: wifi connection with quality
-❎: no ethernet
-🌐: ethernet working
-🔒: vpn is active
+    1) "$TERMINAL" -e nmtui; pkill -RTMIN+4 dwmblocks ;;
+    3) notify-send "🌐 Internet module" "\
+No WiFi: WiFi is disabled or not connected
+WiFi Quality: WiFi connection with quality
+No Ethernet: Ethernet is not connected
+Connected to Ethernet: Ethernet is working
+No VPN: VPN is not active
+VPN Active: VPN is active
 " ;;
-        6) setsid -f "$TERMINAL" -e "$EDITOR" "$0" ;;
+    6) setsid -f "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
-# Wifi
-if [ "$(cat /sys/class/net/w*/operstate 2>/dev/null)" = 'up' ] ; then
-        wifiicon="$(awk '/^\s*w/ { print "📶", int($3 * 100 / 70) "% " }' /proc/net/wireless)"
-        ethericon=""
-elif [ "$(cat /sys/class/net/w*/operstate 2>/dev/null)" = 'down' ] ; then
-        [ "$(cat /sys/class/net/w*/flags 2>/dev/null)" = '0x1003' ] && wifiicon="📡 " || wifiicon=""
-fi
+# Function to get the name of the connected network interface
+get_connected_interface() {
+    # Check for WiFi
+    if [ "$(cat /sys/class/net/w*/operstate 2>/dev/null)" = 'up' ]; then
+        ssid=$(iw dev wlp2s0 link | grep 'SSID:' | awk '{print $2}')
+        if [ -n "$ssid" ]; then
+            echo "$ssid:(UP)"
+        else
+            echo "WiFi: (UP)"
+        fi
+        return
+    fi
 
-# Ethernet
-if [ "$(cat /sys/class/net/e*/operstate 2>/dev/null)" = 'up' ] ; then
-        ethericon="🌐"
-else
-        ethericon="❎"
-fi
+    # Check for Ethernet
+    if [ "$(cat /sys/class/net/enp1s0/operstate 2>/dev/null)" = 'up' ]; then
+        echo "Eth: (UP)"
+        return
+    fi
 
-# TUN
-[ -n "$(cat /sys/class/net/tun*/operstate 2>/dev/null)" ] && tunicon=" 🔒" || tunicon=""
+    # Check for VPN
+    if [ -n "$(cat /sys/class/net/tun*/operstate 2>/dev/null)" ]; then
+        echo "VPN (Active)"
+        return
+    fi
 
-printf "%s%s%s\n" "$wifiicon" "$ethericon" "$tunicon"
+    # If none of the above, show "No Connection"
+    echo "Int :(Down)"
+}
 
+# Display the connected interface name
+get_connected_interface

@@ -1,14 +1,16 @@
 #!/bin/bash
 
-# Terminate any existing wpa_supplicant process
-doas pkill wpa_supplicant
-echo "Terminated any existing wpa_supplicant process."
+# تعيين اسم واجهة الشبكة
+INTERFACE="wlp2s0"
 
-# Disable Wi-Fi interface
-doas ip link set wlp2s0 down
-echo "Disabled Wi-Fi interface."
+# إيقاف واجهة الشبكة
+echo "Bringing down the Wi-Fi interface $INTERFACE..."
+doas ip link set "$INTERFACE" down
 
-# Block Wi-Fi
-doas rfkill block wifi
-echo "Blocked Wi-Fi."
+# تحقق من حالة واجهة الشبكة
+if ip link show "$INTERFACE" | grep -q "state DOWN"; then
+    echo "$INTERFACE is now down."
+else
+    echo "Failed to bring $INTERFACE down."
+fi
 
