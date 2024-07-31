@@ -1,0 +1,72 @@
+super + w
+        $BROWSER
+
+super + v
+        $TERMINAL -e vim
+
+super + d
+        dmenu_run
+
+Print
+        maim -u -i $(xdotool getactivewindow) | xclip -selection clipboard -t image/png
+
+ctrl + Print
+        maim -s | xclip -selection clipboard -t image/png
+
+super + Print
+        $HOME/.local/bin/screencast.sh
+
+super + p
+        mpv $(xclip -o)
+
+super + Return
+        $TERMINAL
+
+super + s
+        $HOME/.local/bin/toggle_scratchpad.sh
+
+super + equal
+    	voulum.sh up
+
+super + minus
+    	voulum.sh down
+
+super + BackSpace
+    	voulum.sh toggle
+
+
+
+
+
+super + m
+        $HOME/.local/bin/mount.sh
+
+super + b
+        $HOME/.local/bin/passmenu.sh
+
+super + x
+        $HOME/.local/bin/x.sh
+
+super + shift + BackSpace
+        $HOME/.local/bin/exit.sh
+
+
+super + k
+        libreoffice
+
+super + g
+        gimp
+
+super + r
+        rawtherapee
+
+super + c
+        code-oss --no-sandbox --user-data-dir=/home/mohamed/Corses
+
+
+
+super + o
+        mypaint
+
+
+
