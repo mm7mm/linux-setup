@@ -5,12 +5,12 @@
 
 alias ls='ls --color=auto'
 ##PS1='[\u@\h \W]\$ '
-PS1='\[\033[01;31m\]\W>\[\033[00m\] '
+PS1='\[\033[01;31m\]\W >\[\033[00m\] '
 
 
 alias ll='ls -l'
 alias i='doas xbps-install -S' 
-alias  u='i; doas xbps-install -u xbps; doas xbps-install -u'
+alias u='i; doas xbps-install -u xbps; doas xbps-install -u'
 alias q='doas xbps-query -Rs'
 alias r='doas xbps-remove -R'
 alias v='mpv --speed=1.7 '
@@ -20,7 +20,7 @@ alias y='yt-dlp -F'
 alias b='yt-dlp -f best'
 alias p='yt-dlp -f 22'
 alias a='mpv --speed=1.3 '
-
+alias n='nnn'
 ##vim
 alias vi='vim'
 ##set -o vi
@@ -66,7 +66,7 @@ alias f='ffmpeg -video_size 1366x768 -framerate 25 -f x11grab -i :0.0 output.mp4
 
 
 # اختصار للدالة التي تبحث عن عناوين الـ IP
-alias whatismyip="whatsmyip"
+alias myip="whatsmyip"
 
 # دالة للبحث عن عناوين الـ IP الداخلية والخارجية
 function whatsmyip () {

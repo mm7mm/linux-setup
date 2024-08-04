@@ -1,4 +1,6 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =2
+let g:netrw_dirhistcnt =4
+let g:netrw_dirhist_4='/home/mohamed/github/void'
+let g:netrw_dirhist_3='/home/mohamed/src/dwm'
 let g:netrw_dirhist_2='/home/mohamed/Corses/C++/C++/app2.cpp'
 let g:netrw_dirhist_1='/home/mohamed/.local/bin'
